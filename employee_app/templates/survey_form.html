@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Survey</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="flex flex-col justify-center items-center min-h-screen leading-loose bg-gray-50">
+        <div class="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-3xl font-bold mb-6 text-center">Employee Survey</h1>
+            
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <p class="p-3 rounded {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <form method="POST" action="{% url 'survey_form' %}" class="space-y-4">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="department" class="font-semibold block mb-2">Department: <span class="text-red-500">*</span></label>
+                    <input type="text" 
+                           placeholder="Enter your department" 
+                           class="bg-gray-100 text-black-700 p-2 rounded border w-full" 
+                           id="department" 
+                           name="department" 
+                           value="{{ department|default:'' }}"
+                           required>
+                </div>
+                
+                <div>
+                    <label for="rating" class="font-semibold block mb-2">Rating (1-5): <span class="text-red-500">*</span></label>
+                    <select class="bg-gray-100 text-black-700 p-2 rounded border w-full" 
+                            id="rating" 
+                            name="rating" 
+                            required>
+                        <option value="">Select a rating</option>
+                        <option value="1" {% if rating == 1 %}selected{% endif %}>1 - Poor</option>
+                        <option value="2" {% if rating == 2 %}selected{% endif %}>2 - Fair</option>
+                        <option value="3" {% if rating == 3 %}selected{% endif %}>3 - Good</option>
+                        <option value="4" {% if rating == 4 %}selected{% endif %}>4 - Very Good</option>
+                        <option value="5" {% if rating == 5 %}selected{% endif %}>5 - Excellent</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="comment" class="font-semibold block mb-2">Comment: <span class="text-red-500">*</span></label>
+                    <textarea placeholder="Enter your comment" 
+                              class="bg-gray-100 text-black-700 p-2 rounded border w-full" 
+                              id="comment" 
+                              name="comment" 
+                              rows="4" 
+                              required>{{ comment|default:'' }}</textarea>
+                </div>
+                
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" 
+                               class="mr-2" 
+                               id="anonymous" 
+                               name="anonymous" 
+                               value="y"
+                               {% if anonymous %}checked{% endif %}>
+                        <span class="font-semibold">Submit anonymously</span>
+                    </label>
+                    <p class="text-sm text-gray-600 mt-1">
+                        {% if user.is_authenticated %}
+                            Currently logged in as: <strong>{{ user.username }}</strong>
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <div class="flex gap-4">
+                    <input type="submit" 
+                           class="bg-blue-500 hover:bg-blue-800 text-white font-semibold p-2 rounded w-full mt-4 cursor-pointer" 
+                           value="Submit Survey">
+                </div>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t">
+                <a href="{% url 'survey_results' %}" class="text-blue-500 hover:text-blue-900 font-semibold">View Survey Results</a>
+                <span class="mx-2">|</span>
+                <a href="{% url 'logout' %}" class="text-blue-500 hover:text-blue-900 font-semibold">Logout</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
