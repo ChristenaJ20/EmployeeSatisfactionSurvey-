@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# Christena Jenkins
+
 # Create your models here.
 
 class SurveySubmission(models.Model):
@@ -12,6 +14,7 @@ class SurveySubmission(models.Model):
     username = models.CharField(max_length=150, null=True, blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
     
+    # Meta information for the model
     class Meta:
         ordering = ['department', '-submitted_at']
         verbose_name = 'Survey Submission'

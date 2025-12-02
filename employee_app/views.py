@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import SurveySubmission
 
+# Christena Jenkins
+# Create your views here.
 def index(request):
     if request.user.is_authenticated:
         # Redirect to a success page or dashboard page
@@ -16,6 +18,7 @@ def index(request):
     else:
         return redirect('login')
 
+# View to handle user login
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -33,10 +36,17 @@ def login(request):
         print(request.session['full_uri'])
         return render(request, 'login.html')
 
+# View to handle user logout
 def logout(request):
+    if request.method == 'POST':
+        auth.logout(request)
+        messages.success(request, 'You have been logged out successfully.')
+        return redirect('login')
+    # Also allow GET for backwards compatibility
     auth.logout(request)
     return redirect('login')
 
+# View to handle user registration
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -59,6 +69,7 @@ def register(request):
 def success(request):
     return render(request, 'success.html')
 
+# View to display and handle the survey form
 @login_required
 def survey_form(request):
     """Display and handle employee survey form submission."""

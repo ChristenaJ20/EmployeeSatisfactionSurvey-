@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+# Christena Jenkins
+# URL patterns for the employee_app Django application
 urlpatterns = [
     path('', views.index, name='index'),
     path('accounts/login/', views.login, name='login'),
